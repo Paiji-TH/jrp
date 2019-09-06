@@ -4,13 +4,11 @@
     {
         public ICharacter Character { get; set; }
         public PlayerState State { get; set; }
-        public bool IsFirstLogin { get; }
 
-        public Session(ICharacter character, PlayerState state, bool isFirstLogin)
+        public Session(ICharacter character, PlayerState state)
         {
             Character = character;
             State = state;
-            IsFirstLogin = isFirstLogin;
         }
     }
 }

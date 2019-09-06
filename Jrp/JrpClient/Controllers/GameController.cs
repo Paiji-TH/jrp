@@ -64,7 +64,8 @@ namespace JrpClient.Controllers
 
         private void OnCreateNewCharacter()
         {
-            BaseScript.TriggerServerEvent("jrp:notifyCharacterCreation", "riCCardo PalleSCHI", SerializeObject(Appereance.GetCurrentSkin()));
+            // Testing.
+            BaseScript.TriggerServerEvent("jrp:notifyCharacterCreation", "", SerializeObject(Appereance.GetCurrentSkin()));
         }
 
         private void OnInitClient()

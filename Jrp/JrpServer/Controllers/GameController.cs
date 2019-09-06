@@ -1,5 +1,4 @@
-﻿using JrpServer.Controllers.Data;
-using JrpShared.Data;
+﻿using JrpShared.Data;
 using System.Collections.Generic;
 using static JrpServer.Log;
 

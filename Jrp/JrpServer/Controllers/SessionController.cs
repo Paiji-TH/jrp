@@ -3,12 +3,12 @@ using JrpServer.Controllers.Data;
 using JrpShared.Data;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using static CitizenFX.Core.Native.API;
 using static JrpServer.Log;
 using static JrpServer.Server;
 using static JrpShared.Data.Serialization;
-using static CitizenFX.Core.Native.API;
-using System.Linq;
 
 namespace JrpServer.Controllers
 {
@@ -35,16 +35,11 @@ namespace JrpServer.Controllers
         {
             WriteToConsole($"{player.Name} Connesso.");
 
+            CreateNewSession(player, new Session(null, PlayerState.Connecting));
+
             CheckUserRegistration(player);
 
-            if (Database.FetchCharacterId(Database.FetchUserId(player)) != 0)
-                CreateNewSession(player, new Session(Database.FetchCharacter(Database.FetchUserId(player)), PlayerState.Connected, false));
-            else
-            {
-                Database.RegisterNewCharacter(Database.FetchUserId(player), await CharacterRegistration(player));
-
-                CreateNewSession(player, new Session(Database.FetchCharacter(Database.FetchUserId(player)), PlayerState.Connected, true));
-            }
+            await CheckCharacterRegistration(player);
         }
 
         private void CheckUserRegistration(Player player)
@@ -72,12 +67,27 @@ namespace JrpServer.Controllers
                 SessionByHandle.Add(player.Handle, session);
 
                 WriteToConsole($"Sessione creata per {player.Name} {player.Handle}");
-
-                BaseScript.TriggerClientEvent(player, "jrp:initClient");
             }
         }
 
-        private async Task<Character> CharacterRegistration(Player player)
+        private async Task CheckCharacterRegistration(Player player)
+        {
+            if (Database.FetchCharacterId(Database.FetchUserId(player)) != 0)
+            {
+                SessionByHandle[player.Handle].Character = Database.FetchCharacter(Database.FetchUserId(player));
+                SessionByHandle[player.Handle].State = PlayerState.Connected;
+
+                BaseScript.TriggerClientEvent(player, "jrp:initClient");
+            }
+            else
+            {
+                Database.RegisterNewCharacter(Database.FetchUserId(player), await CreateNewCharacter(player));
+
+                await CheckCharacterRegistration(player);
+            }
+        }
+
+        private async Task<ICharacter> CreateNewCharacter(Player player)
         {
             Character character = null;
 
