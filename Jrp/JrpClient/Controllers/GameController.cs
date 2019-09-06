@@ -1,4 +1,5 @@
 ﻿using CitizenFX.Core;
+using CitizenFX.Core.UI;
 using JrpClient.Controllers.Data;
 using JrpShared.Data;
 using System;
@@ -54,6 +55,24 @@ namespace JrpClient.Controllers
             StatSetInt((uint)GetHashKey("MP0_STAMINA"), 100, true);
             StatSetInt((uint)GetHashKey("MP1_STAMINA"), 100, true);
         }
+
+        public async Task<IDictionary<string, ISession>> FetchSessions()
+        {
+            Screen.LoadingPrompt.Show("In attesa del Server...");
+
+            IDictionary<string, ISession> sessions = null;
+
+            BaseScript.TriggerEvent("jrp:fetchSessions", new Action<string>((arg) => sessions = DeserializeObject<IDictionary<string, ISession>>(arg)));
+
+            while (sessions == null)
+                await BaseScript.Delay(50);
+
+            Screen.LoadingPrompt.Hide();
+
+            return sessions;
+        }
+
+        public async Task<ICharacter> FetchCharacter() => (await FetchSessions())[Game.Player.ServerId.ToString()].Character;
 
         private void OnPlayerSpawned()
         {

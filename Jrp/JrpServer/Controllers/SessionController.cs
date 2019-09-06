@@ -21,6 +21,7 @@ namespace JrpServer.Controllers
         public void Boot()
         {
             GetInstance().RegisterEventHandler("jrp:playerSpawned", new Action<Player>(OnPlayerSpawned));
+            GetInstance().RegisterEventHandler("jrp:fetchSessions", new Action<Player, NetworkCallbackDelegate>(OnFetchSessions));
 
             SessionByHandle = new Dictionary<string, ISession>();
             Database = new Database();
@@ -138,6 +139,13 @@ namespace JrpServer.Controllers
             }
 
             return false;
+        }
+
+        private void OnFetchSessions([FromSource]Player player, NetworkCallbackDelegate networkCB)
+        {
+            WriteToConsole($"Sincronizzo sessioni con {player.Name} {player.Handle}");
+
+            networkCB.Invoke(SerializeObject(SessionByHandle));
         }
     }
 }
