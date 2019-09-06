@@ -1,5 +1,6 @@
 ﻿using CitizenFX.Core;
 using JrpClient.Controllers;
+using JrpClient.Controllers.Menus;
 using JrpShared.Data;
 using System;
 using System.Collections.Generic;
@@ -14,21 +15,25 @@ namespace JrpClient
 
         public static Client GetInstance() => Instance;
 
-        public ICollection<IController> ControllerList = new Collection<IController>();
-
+        public ICollection<IController> ControllerCollection = new Collection<IController>();
+        public ICollection<IMenu> MenuCollection = new Collection<IMenu>();
         public GameController Game = new GameController();
         public ScreenController Screen = new ScreenController();
         public VehicleController Vehicle = new VehicleController();
         public WorldController World = new WorldController();
 
+        public MainMenu MainMenu = new MainMenu();
+
         public Client()
         {
             Instance = this;
 
-            ControllerList.Add(Game);
-            ControllerList.Add(Screen);
-            ControllerList.Add(Vehicle);
-            ControllerList.Add(World);
+            ControllerCollection.Add(Game);
+            ControllerCollection.Add(Screen);
+            ControllerCollection.Add(Vehicle);
+            ControllerCollection.Add(World);
+
+            MenuCollection.Add(MainMenu);
 
             Boot();
         }
@@ -47,13 +52,22 @@ namespace JrpClient
 
         public void Init()
         {
-            foreach (IController controller in ControllerList)
+            foreach (IController controller in ControllerCollection)
                 controller.Init();
+        }
+
+        public void InitMenu()
+        {
+            foreach (IMenu menu in MenuCollection)
+            {
+                menu.CreateMenu();
+                menu.CreateMenuItems();
+            }
         }
 
         private void Boot()
         {
-            foreach (IController controller in ControllerList)
+            foreach (IController controller in ControllerCollection)
                 controller.Boot();
         }
     }

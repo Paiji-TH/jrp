@@ -52,6 +52,8 @@
     <Compile Include="Client.cs" />
     <Compile Include="Controllers\Data\Appereance.cs" />
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\Menus\IMenu.cs" />
+    <Compile Include="Controllers\Menus\MainMenu.cs" />
     <Compile Include="Controllers\ScreenController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
     <Compile Include="Controllers\WorldController.cs" />
@@ -67,9 +69,7 @@
       <Name>JrpShared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers\Menus\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y "$(TargetPath)" "C:\FXJrp\cfx-server-data\resources\[dev]\jrp"</PostBuildEvent>

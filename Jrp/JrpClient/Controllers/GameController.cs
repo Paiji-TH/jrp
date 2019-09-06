@@ -33,6 +33,7 @@ namespace JrpClient.Controllers
         public void Init()
         {
             GetInstance().GetExports()["spawnmanager"].setAutoSpawn(false);
+
             GetInstance().RegisterTickHandler(GameplayChanges);
 
             NetworkSetFriendlyFireOption(true);
@@ -79,6 +80,7 @@ namespace JrpClient.Controllers
             BaseScript.TriggerServerEvent("jrp:playerSpawned");
 
             GetInstance().Init();
+            GetInstance().InitMenu();
         }
 
         private void OnCreateNewCharacter()
