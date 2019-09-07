@@ -83,7 +83,7 @@ namespace JrpServer.Controllers.Data
         {
             DataRow row = GetDataTable($"SELECT * FROM `Character` WHERE UserId = '{userId}'").Select().First();
 
-            return new Character(row["Name"].ToString(), Convert.ToUInt32(row["cash"]), Convert.ToUInt32(row["credit"]), DeserializeObject<IJob>(row["Job"].ToString()), DeserializeObject<ICollection<IItem>>(row["Items"].ToString()), DeserializeObject<Skin>(row["Skin"].ToString()));
+            return new Character(row["Name"].ToString(), Convert.ToUInt32(row["Cash"]), Convert.ToUInt32(row["Credit"]), DeserializeObject<IJob>(row["Job"].ToString()), DeserializeObject<ICollection<IItem>>(row["Items"].ToString()), DeserializeObject<Skin>(row["Skin"].ToString()));
         }
 
         private string GetConnectionString()

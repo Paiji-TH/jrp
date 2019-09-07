@@ -23,6 +23,7 @@ namespace JrpClient
         public WorldController World = new WorldController();
 
         public MainMenu MainMenu = new MainMenu();
+        public SessionMenu SessionMenu = new SessionMenu();
 
         public Client()
         {
@@ -34,6 +35,7 @@ namespace JrpClient
             ControllerCollection.Add(World);
 
             MenuCollection.Add(MainMenu);
+            MenuCollection.Add(SessionMenu);
 
             Boot();
         }

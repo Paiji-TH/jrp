@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace JrpShared.Data
@@ -12,6 +13,7 @@ namespace JrpShared.Data
         public ICollection<IItem> Inventory { get; set; }
         public ISkin Skin { get; set; }
 
+        [JsonConstructor]
         public Character(string name, uint cash, uint credit, IJob job, ICollection<IItem> inventory, ISkin skin)
         {
             Name = name;

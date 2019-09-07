@@ -63,7 +63,14 @@ namespace JrpClient.Controllers
 
             IDictionary<string, ISession> sessions = null;
 
-            BaseScript.TriggerEvent("jrp:fetchSessions", new Action<string>((arg) => sessions = DeserializeObject<IDictionary<string, ISession>>(arg)));
+            BaseScript.TriggerServerEvent("jrp:fetchSessions", new Action<string>((arg) =>
+            {
+                sessions = DeserializeObject<IDictionary<string, ISession>>(arg);
+                foreach(var s in sessions)
+                {
+                    Debug.WriteLine($"{s.Key} {s.Value.State} {s.Value.Character.Name}");
+                }
+            }));
 
             while (sessions == null)
                 await BaseScript.Delay(50);
@@ -74,6 +81,17 @@ namespace JrpClient.Controllers
         }
 
         public async Task<ICharacter> FetchCharacter() => (await FetchSessions())[Game.Player.ServerId.ToString()].Character;
+
+        public bool IsPlayerActive(int serverId)
+        {
+            foreach (var player in GetInstance().GetPlayers())
+            {
+                if (player.ServerId == serverId)
+                    return true;
+            }
+
+            return false;
+        }
 
         private void OnPlayerSpawned()
         {
@@ -86,7 +104,7 @@ namespace JrpClient.Controllers
         private void OnCreateNewCharacter()
         {
             // Testing.
-            BaseScript.TriggerServerEvent("jrp:notifyCharacterCreation", "", SerializeObject(Appereance.GetCurrentSkin()));
+            BaseScript.TriggerServerEvent("jrp:notifyCharacterCreation", "Alfonzo Signorini", SerializeObject(Appereance.GetCurrentSkin()));
         }
 
         private void OnInitClient()

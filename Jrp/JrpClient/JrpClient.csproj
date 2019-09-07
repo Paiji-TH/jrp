@@ -34,7 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CitizenFX.Core.Client, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1550\lib\net45\CitizenFX.Core.Client.dll</HintPath>
+      <HintPath>..\packages\CitizenFX.Core.Client.1.0.1570\lib\net45\CitizenFX.Core.Client.dll</HintPath>
     </Reference>
     <Reference Include="MenuAPI">
       <HintPath>..\Dependencies\MenuAPI.dll</HintPath>
@@ -54,6 +54,7 @@
     <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\Menus\IMenu.cs" />
     <Compile Include="Controllers\Menus\MainMenu.cs" />
+    <Compile Include="Controllers\Menus\SessionMenu.cs" />
     <Compile Include="Controllers\ScreenController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
     <Compile Include="Controllers\WorldController.cs" />
@@ -61,15 +62,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\JrpShared\JrpShared.csproj">
       <Project>{078c638b-3412-40a6-be62-0842920654ba}</Project>
       <Name>JrpShared</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y "$(TargetPath)" "C:\FXJrp\cfx-server-data\resources\[dev]\jrp"</PostBuildEvent>
