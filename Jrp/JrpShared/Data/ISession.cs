@@ -10,5 +10,6 @@
     {
         ICharacter Character { get; set; }
         PlayerState State { get; set; }
+        bool IsNameHidden { get; set; }
     }
 }

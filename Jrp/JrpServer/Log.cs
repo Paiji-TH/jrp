@@ -2,7 +2,7 @@
 
 namespace JrpServer
 {
-    static class Log
+    internal static class Log
     {
         public enum MessageType
         {

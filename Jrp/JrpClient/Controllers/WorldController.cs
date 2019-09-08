@@ -27,7 +27,7 @@ namespace JrpClient.Controllers
         BikerBackup = 15
     };
 
-    sealed class WorldController : IController
+    internal sealed class WorldController : IController
     {
         public void Boot()
         {

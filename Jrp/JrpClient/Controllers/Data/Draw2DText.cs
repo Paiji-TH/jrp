@@ -4,7 +4,7 @@ using static CitizenFX.Core.Native.API;
 
 namespace JrpClient.Controllers.Data
 {
-    sealed class Draw2DText
+    internal sealed class Draw2DText
     {
         public float X;
         public float Y;

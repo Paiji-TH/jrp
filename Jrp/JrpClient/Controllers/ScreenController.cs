@@ -10,7 +10,7 @@ using static JrpClient.Client;
 
 namespace JrpClient.Controllers
 {
-    sealed class ScreenController : IController
+    internal sealed class ScreenController : IController
     {
         public IDictionary<string, Draw2DText> TextModulesByName;
         public IReadOnlyCollection<string> IPLCollection;

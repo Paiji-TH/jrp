@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using static CitizenFX.Core.Native.API;
 using static JrpClient.Client;
-using static JrpShared.Data.Serialization;
+using static JrpShared.Helpers.Serialization;
 
 namespace JrpClient.Controllers
 {
-    sealed class GameController : IController
+    internal sealed class GameController : IController
     {
         public Appereance Appereance;
 
@@ -63,14 +63,7 @@ namespace JrpClient.Controllers
 
             IDictionary<string, ISession> sessions = null;
 
-            BaseScript.TriggerServerEvent("jrp:fetchSessions", new Action<string>((arg) =>
-            {
-                sessions = DeserializeObject<IDictionary<string, ISession>>(arg);
-                foreach(var s in sessions)
-                {
-                    Debug.WriteLine($"{s.Key} {s.Value.State} {s.Value.Character.Name}");
-                }
-            }));
+            BaseScript.TriggerServerEvent("jrp:fetchSessions", new Action<string>((arg) => sessions = DeserializeObject<IDictionary<string, ISession>>(arg)));
 
             while (sessions == null)
                 await BaseScript.Delay(50);
@@ -95,6 +88,13 @@ namespace JrpClient.Controllers
 
         private void OnPlayerSpawned()
         {
+            Game.Player.CanControlCharacter = false;
+            Game.PlayerPed.IsVisible = false;
+            Game.PlayerPed.IsInvincible = true;
+            Game.PlayerPed.CanRagdoll = false;
+
+            NetworkSetEntityInvisibleToNetwork(Game.PlayerPed.Handle, true);
+
             BaseScript.TriggerServerEvent("jrp:playerSpawned");
 
             GetInstance().Init();
@@ -103,13 +103,21 @@ namespace JrpClient.Controllers
 
         private void OnCreateNewCharacter()
         {
-            // Testing.
-            BaseScript.TriggerServerEvent("jrp:notifyCharacterCreation", "Alfonzo Signorini", SerializeObject(Appereance.GetCurrentSkin()));
+            GetInstance().PedCreationMenu.Menu.OpenMenu();
         }
 
-        private void OnInitClient()
+        private async void OnInitClient()
         {
+            Game.Player.CanControlCharacter = true;
+            Game.PlayerPed.IsVisible = true;
+            Game.PlayerPed.IsInvincible = false;
+            Game.PlayerPed.CanRagdoll = true;
 
+            NetworkSetEntityInvisibleToNetwork(Game.PlayerPed.Handle, false);
+
+            Appereance.LoadSkin((await FetchCharacter()).Skin);
+
+            //Fetches informations and loads ui
         }
     }
 }

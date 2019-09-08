@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
-using static JrpShared.Data.Serialization;
+using static JrpShared.Helpers.Serialization;
 
 namespace JrpServer.Controllers.Data
 {
-    sealed class Database
+    internal sealed class Database
     {
         private string ConnectionString;
 
@@ -79,6 +79,7 @@ namespace JrpServer.Controllers.Data
 
         public void RegisterNewCharacter(int userId, ICharacter character) => ExecuteNonQuery($"INSERT INTO `Character` (Name, Cash, Credit, Job, Items, Skin, UserId) VALUES ('{SerializeObject(character.Name)}', '{SerializeObject(character.Cash)}', '{SerializeObject(character.Credit)}', '{SerializeObject(character.Job)}', '{SerializeObject(character.Inventory)}', '{SerializeObject(character.Skin)}', '{userId}');");
 
+        // TODO Add CharacterExceptions.
         public ICharacter FetchCharacter(int userId)
         {
             DataRow row = GetDataTable($"SELECT * FROM `Character` WHERE UserId = '{userId}'").Select().First();

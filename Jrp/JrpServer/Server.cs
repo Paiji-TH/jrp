@@ -9,7 +9,7 @@ using static JrpServer.Log;
 
 namespace JrpServer
 {
-    sealed class Server : BaseScript
+    internal sealed class Server : BaseScript
     {
         private static Server Instance;
 

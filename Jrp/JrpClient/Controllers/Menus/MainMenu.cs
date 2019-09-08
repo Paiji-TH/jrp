@@ -3,10 +3,9 @@ using MenuAPI;
 
 namespace JrpClient.Controllers.Menus
 {
-    sealed class MainMenu : IMenu
+    internal sealed class MainMenu : IMenu
     {
         public Menu Menu { get; set; }
-        public MenuItem MenuButton { get; set; }
 
         public void CreateMenu()
         {

@@ -1,19 +1,17 @@
-﻿using CitizenFX.Core;
-using MenuAPI;
+﻿using MenuAPI;
 using static JrpClient.Client;
-using static CitizenFX.Core.Native.API;
 
 namespace JrpClient.Controllers.Menus
 {
-    class SessionMenu : IMenu
+    internal sealed class SessionMenu : IMenu
     {
         public Menu Menu { get; set; }
-        public MenuItem MenuButton { get; set; }
+        public MenuItem MenuButton;
 
         public void CreateMenu()
         {
-            Menu = new Menu($"{Game.Player.Name}", "Sottotitolo");
-            MenuButton = new MenuItem("Nome", "Descrizione") { Label = "→→→" };
+            Menu = new Menu($"SessionMenu", "Sottotitolo");
+            MenuButton = new MenuItem(Menu.MenuTitle, "Descrizione") { Label = "→→→" };
 
             Menu.OnMenuOpen += new Menu.MenuOpenedEvent(OnMenuOpen);
 

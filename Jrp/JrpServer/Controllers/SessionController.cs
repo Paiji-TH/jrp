@@ -3,16 +3,15 @@ using JrpServer.Controllers.Data;
 using JrpShared.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using static CitizenFX.Core.Native.API;
 using static JrpServer.Log;
 using static JrpServer.Server;
-using static JrpShared.Data.Serialization;
+using static JrpShared.Helpers.Common;
+using static JrpShared.Helpers.Serialization;
 
 namespace JrpServer.Controllers
 {
-    sealed class SessionController : IController
+    internal sealed class SessionController : IController
     {
         public IDictionary<string, ISession> SessionByHandle;
 
@@ -60,8 +59,6 @@ namespace JrpServer.Controllers
                 WriteToConsole($"Non è stato possibile creare una nuova sessione per {player.Name} {player.Handle}", MessageType.Error);
 
                 player.Drop("Si è verificato un errore :(");
-
-                CancelEvent();
             }
             else
             {
@@ -88,6 +85,7 @@ namespace JrpServer.Controllers
             }
         }
 
+        // TODO Rewrite server side validation.
         private async Task<ICharacter> CreateNewCharacter(Player player)
         {
             Character character = null;
@@ -98,47 +96,27 @@ namespace JrpServer.Controllers
             {
                 if (ValidateCharacterName(ref name))
                 {
-                    character = new Character(name, GetInstance().Game.Jobs["disoccupato"], DeserializeObject<ISkin>(serializedSkin));
+                    if (Database.FetchCharacterId(Database.FetchUserId(player)) != 0)
+                    {
+                        WriteToConsole($"Non è stato possibile registrare un nuovo personaggio per {player.Name} {player.Handle}", MessageType.Error);
 
-                    WriteToConsole($"Nuovo personaggio registrato {name} da {player.Name}");
+                        player.Drop("Si è verificato un errore :(");
+                    }
+                    else
+                    {
+                        character = new Character(name, GetInstance().Game.Jobs["disoccupato"], DeserializeObject<ISkin>(serializedSkin));
+
+                        WriteToConsole($"Nuovo personaggio registrato {name} da {player.Name}");
+                    }
                 }
                 else
-                {
                     player.Drop("Si è verificato un errore :(");
-
-                    CancelEvent();
-                }
             }));
 
             while (character == null)
                 await BaseScript.Delay(500);
 
             return character;
-        }
-
-        private bool ValidateCharacterName(ref string name)
-        {
-            string[] credentials = name.Split();
-
-            if (name.Split().Length == 2)
-            {
-                if (credentials[0].All(char.IsLetter) && credentials[1].All(char.IsLetter))
-                {
-                    if (credentials[0].Length > 2 && credentials[0].Length < 16 && credentials[1].Length > 2 && credentials[1].Length < 16)
-                    {
-                        credentials[0] = credentials[0].ToLower();
-                        credentials[1] = credentials[1].ToLower();
-                        credentials[0] = credentials[0][0].ToString().ToUpper() + credentials[0].Substring(1);
-                        credentials[1] = credentials[1][0].ToString().ToUpper() + credentials[1].Substring(1);
-
-                        name = credentials[0] + " " + credentials[1];
-
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         private void OnFetchSessions([FromSource]Player player, NetworkCallbackDelegate networkCB)

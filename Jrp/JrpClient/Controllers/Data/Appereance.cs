@@ -6,7 +6,7 @@ using static CitizenFX.Core.Native.API;
 
 namespace JrpClient.Controllers.Data
 {
-    sealed class Appereance
+    internal sealed class Appereance
     {
         public void LoadDefaultComponentVariation()
         {
@@ -94,16 +94,12 @@ namespace JrpClient.Controllers.Data
             };
         }
 
-        public async Task LoadDefaultModel()
+        public async Task LoadDefaultModel(PedHash pedHash)
         {
             Screen.LoadingPrompt.Show("Caricamento...");
 
-            while (Game.PlayerPed.Model != new Model(PedHash.FreemodeMale01))
-            {
-                await Game.Player.ChangeModel(new Model(PedHash.FreemodeMale01));
-
-                await BaseScript.Delay(10);
-            }
+            while (Game.PlayerPed.Model != pedHash)
+                await Game.Player.ChangeModel(pedHash);
 
             LoadDefaultComponentVariation();
 

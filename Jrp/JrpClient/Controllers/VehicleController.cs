@@ -2,7 +2,7 @@
 
 namespace JrpClient.Controllers
 {
-    sealed class VehicleController : IController
+    internal sealed class VehicleController : IController
     {
         public void Boot()
         {

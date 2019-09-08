@@ -4,7 +4,7 @@ using static JrpServer.Log;
 
 namespace JrpServer.Controllers
 {
-    sealed class GameController : IController
+    internal sealed class GameController : IController
     {
         public IDictionary<string, IJob> Jobs;
         public IDictionary<string, IItem> Items;

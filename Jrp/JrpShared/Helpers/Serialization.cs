@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using JrpShared.Data;
+using Newtonsoft.Json;
 using System;
 
-namespace JrpShared.Data
+namespace JrpShared.Helpers
 {
     public static class Serialization
     {

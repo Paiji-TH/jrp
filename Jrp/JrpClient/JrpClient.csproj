@@ -51,7 +51,9 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Controllers\Data\Appereance.cs" />
+    <Compile Include="Controllers\Data\Draw3DText.cs" />
     <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\Menus\PedCreationMenu.cs" />
     <Compile Include="Controllers\Menus\IMenu.cs" />
     <Compile Include="Controllers\Menus\MainMenu.cs" />
     <Compile Include="Controllers\Menus\SessionMenu.cs" />
